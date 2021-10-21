@@ -1,0 +1,7 @@
+main:
+  read: # Read head
+      1: # if value is 1
+        write: 0 # Make it a zero
+        move: right # Move right
+      0: # If its 0
+        move: right # Just move right

@@ -7,6 +7,7 @@ class TuringInterpreter:
         self.tree = {}
         self.tape = {0: 1, 1: 0, 2: 0}
         self.goto_flag = "flag go brrr"
+        self.exec_start = "main"
         self.position = 0
 
         self.EXIT_SIG = "exit"
@@ -15,13 +16,17 @@ class TuringInterpreter:
             "read": self.read,
             "write": self.write,
             "move": self.move,
-            "goto": self.goto_flag,
+            "goto": self.goto,
         }
 
     def load_tree(self, data):
         self.tree = data
 
     #############################
+
+    def goto(self, point):
+        self.exec_start = point
+        return self.goto_flag
 
     def move(self, dir):
         if dir == "left":
@@ -53,14 +58,15 @@ class TuringInterpreter:
             ret = self.action(i, instructions[i])
             if ret == self.EXIT_SIG:
                 return self.EXIT_SIG
+            if ret == self.goto_flag:
+                return self.goto_flag
 
     def execute(self):
         print("START")
-        current_func = self.scope(self.tree["main"])
-        if current_func is not None:
-            current_func = self.scope(self.tree[current_func])
-        elif current_func == self.EXIT_SIG:
-            exit(0)
+        while True:
+            func = self.scope(self.tree[self.exec_start])
+            if func == self.EXIT_SIG:
+                break
 
         print(self.tape)
 
