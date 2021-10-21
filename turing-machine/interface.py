@@ -6,6 +6,7 @@ tape = {}
 
 with open("tape.json", "r") as f:
     tape = Tape(json.load(f))
+    print(tape)
 
 selected = 0
 term = None
@@ -26,7 +27,7 @@ def draw_tape(tape):
     if started:
         for i in range(1, term.width - 1):
             if i == selected + 1:
-                style = term.white_on_blue_reverse_blink
+                style = term.white_on_blue_reverse
             else:
                 style = term.white_on_blue
 
@@ -59,9 +60,11 @@ def loop():
             if val.is_sequence:
                 val = val.name
                 if val == "KEY_LEFT":
-                    selected -= 1
+                    if selected > 0:
+                        selected -= 1
                 if val == "KEY_RIGHT":
-                    selected += 1
+                    if selected < term.width - 3:
+                        selected += 1
 
                 if val == "KEY_ENTER":
                     new = "_"
@@ -72,5 +75,7 @@ def loop():
                     if tape[selected] == "_":
                         new = 0
                     tape[selected] = new
+        with open("tape.json", "w") as f:
+            json.dump(tape.data, f)
 
         selected = -1

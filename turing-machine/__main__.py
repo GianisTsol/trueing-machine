@@ -2,6 +2,7 @@ import yaml
 import sys
 import interface
 from common import Tape
+import time
 
 
 class TuringInterpreter:
@@ -51,6 +52,9 @@ class TuringInterpreter:
 
     ###############################
     def action(self, act, args=None):
+        time.sleep(0.2)
+        interface.draw_tape(new.tape)
+        interface.selected = self.position
         if act in self.func_table:
             return self.func_table[act](args)
 
