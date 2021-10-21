@@ -1,11 +1,13 @@
 import yaml
 import sys
+import interface
+from common import Tape
 
 
 class TuringInterpreter:
     def __init__(self):
         self.tree = {}
-        self.tape = {0: 1, 1: 0, 2: 1}
+        self.tape = Tape({0: 1, 1: 0, 2: 1})
         self.goto_flag = "flag go brrr"
         self.exec_start = "main"
         self.position = 0
@@ -33,12 +35,12 @@ class TuringInterpreter:
             self.position -= 1
         elif dir == "right":
             self.position += 1
+        else:
+            self.position += int(dir)
 
     def read(self, tree):
-        if self.position in self.tape:
-            val = self.tape[self.position]
-        else:
-            val = ""
+        val = self.tape[self.position]
+        if val == "_":
             return self.EXIT_SIG
 
         if val in tree:
@@ -63,22 +65,22 @@ class TuringInterpreter:
         return None
 
     def execute(self):
-        print("START")
         while True:
             func = self.scope(self.tree[self.exec_start])
             if func == self.EXIT_SIG or func is None:
                 break
 
-        print(self.tape)
 
+if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print("Provide file as arguments")
+        exit(code=1)
 
-if len(sys.argv) == 1:
-    print("Provide file")
-    exit(code=1)
-
-with open(sys.argv[1]) as file:
-    list = yaml.safe_load(file)
-    print(list)
-    new = TuringInterpreter()
-    new.load_tree(list)
-    new.execute()
+    with open(sys.argv[1]) as file:
+        list = yaml.safe_load(file)
+        tape = interface.init()
+        new = TuringInterpreter()
+        new.tape = tape
+        new.load_tree(list)
+        new.execute()
+        interface.draw_tape(new.tape)
