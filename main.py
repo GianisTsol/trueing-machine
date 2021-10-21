@@ -5,7 +5,7 @@ import sys
 class TuringInterpreter:
     def __init__(self):
         self.tree = {}
-        self.tape = {0: 1, 1: 0, 2: 0}
+        self.tape = {0: 1, 1: 0, 2: 1}
         self.goto_flag = "flag go brrr"
         self.exec_start = "main"
         self.position = 0
@@ -60,12 +60,13 @@ class TuringInterpreter:
                 return self.EXIT_SIG
             if ret == self.goto_flag:
                 return self.goto_flag
+        return None
 
     def execute(self):
         print("START")
         while True:
             func = self.scope(self.tree[self.exec_start])
-            if func == self.EXIT_SIG:
+            if func == self.EXIT_SIG or func is None:
                 break
 
         print(self.tape)

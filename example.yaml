@@ -5,3 +5,4 @@ main:
         move: right # Move right
       0: # If its 0
         move: right # Just move right
+  goto: main
