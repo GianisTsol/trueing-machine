@@ -37,14 +37,20 @@ def draw_tape(tape):
                 + str(tape[i - 1])
                 + term.normal
             )
+            print(
+                term.clear_eol
+                + term.move_xy(1, term.height // 2 + 2)
+                + " "
+                + str(selected)
+                + " "
+                + term.normal
+            )
 
 
 def loop():
     global selected
     global tape
     print(term.home + term.clear)
-    print(term.move_xy(1, term.height // 2 + 2) + "0" + term.normal)
-
     print(
         term.move_xy(term.width // 2, term.height // 2 - 10)
         + term.red_bold
@@ -66,16 +72,12 @@ def loop():
                     if selected < term.width - 3:
                         selected += 1
 
-                if val == "KEY_ENTER":
-                    new = "_"
-                    if tape[selected] == 0:
-                        new = 1
-                    if tape[selected] == 1:
-                        new = "_"
-                    if tape[selected] == "_":
-                        new = 0
-                    tape[selected] = new
+            try:
+                tape[selected] = int(val)
+            except ValueError:
+                pass
+
         with open("tape.json", "w") as f:
             json.dump(tape.data, f)
 
-        selected = -1
+        selected = 0

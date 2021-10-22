@@ -41,17 +41,17 @@ class TuringInterpreter:
 
     def read(self, tree):
         val = self.tape[self.position]
+        if val in tree:
+            return self.scope(tree[val])
+
         if val == "_":
             return self.EXIT_SIG
-
-        if val in tree:
-            self.scope(tree[val])
 
     def write(self, val):
         self.tape[self.position] = val
 
     ###############################
-    def action(self, act, args=None):
+    def action(self, act, args):
         time.sleep(0.2)
         interface.draw_tape(new.tape)
         interface.selected = self.position
@@ -69,6 +69,8 @@ class TuringInterpreter:
         return None
 
     def execute(self):
+        if "initial" in self.tree:
+            self.position = self.tree["initial"]
         while True:
             func = self.scope(self.tree[self.exec_start])
             if func == self.EXIT_SIG or func is None:

@@ -1,0 +1,37 @@
+check-equal:
+  read:
+    1:
+      move: 5
+      read:
+        0:
+          goto: check-failed
+        1:
+          move: -5
+    0:
+      move: 5
+      read:
+        1:
+          goto: check-failed
+        0:
+          move: -5
+
+    _:
+      goto: check-success
+  move: 1
+  goto: check-equal
+
+
+
+
+check-failed:
+  goto: check-failed
+
+check-success:
+  write: 1
+
+main:
+  goto: check-equal
+
+#provide 2 lists of 4 numbers seperated by a blank.
+#example: 1010_1010
+#if they match the blank will be made into a 1.
