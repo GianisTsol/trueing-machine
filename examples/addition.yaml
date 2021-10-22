@@ -1,0 +1,63 @@
+# IHAVE NO IDEA HOW THIS WORKS BUT IT DOES
+
+carry:
+  read:
+    _:
+      write: 1
+      goto: carry
+      read:
+        1:
+          write: 0
+          move: -1
+          goto: carry
+        0:
+          write: 1
+          move: -8
+          goto: addition
+    1:
+      write: 0
+      move: -1
+      read:
+        1:
+          goto: carry
+        0:
+          write: 1
+          move: -8
+          goto: addition
+      goto: carry
+
+addition:
+  read:
+    1:
+      move: 5
+      read:
+        0:
+          move: 5
+          write: 1
+        1:
+          move: 5
+          goto: carry
+    0:
+      move: 5
+      read:
+        1:
+          move: 5
+          write: 1
+        0:
+          move: 5
+          write: 0
+    _:
+      move: 6
+      goto: addition-finish
+  move: -9
+  goto: addition
+
+
+addition-finish:
+  #do stuff with result
+  move: -1
+  write: 9
+
+
+main:
+  goto: addition

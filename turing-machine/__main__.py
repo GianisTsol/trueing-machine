@@ -1,14 +1,15 @@
 import yaml
 import sys
 import interface
-from common import Tape
 import time
+
+from collections import defaultdict
 
 
 class TuringInterpreter:
     def __init__(self):
         self.tree = {}
-        self.tape = Tape({0: 1, 1: 0, 2: 1})
+        self.tape = defaultdict(lambda: "_")
         self.goto_flag = "flag go brrr"
         self.exec_start = "main"
         self.position = 0
@@ -40,15 +41,16 @@ class TuringInterpreter:
             self.position += int(dir)
 
     def read(self, tree):
-        val = self.tape[self.position]
-        if val in tree:
-            return self.scope(tree[val])
+        if str(self.position) in self.tape:
+            val = self.tape[str(self.position)]
+            if val in tree:
+                return self.scope(tree[val])
 
-        if val == "_":
-            return self.EXIT_SIG
+            if val == "_":
+                return self.EXIT_SIG
 
     def write(self, val):
-        self.tape[self.position] = val
+        self.tape[str(self.position)] = val
 
     ###############################
     def action(self, act, args):
@@ -61,6 +63,7 @@ class TuringInterpreter:
     def scope(self, instructions):
         # print("NEW SCOPE ", instructions)
         for i in instructions.keys():
+            # print(i, instructions[i])
             ret = self.action(i, instructions[i])
             if ret == self.EXIT_SIG:
                 return self.EXIT_SIG
