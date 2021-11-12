@@ -79,6 +79,7 @@ def loop():
                 pass
 
         with open("tape.json", "w+") as f:
-            json.dump(tape, f)
+            s = dict([(i, j) for i, j in tape.items() if j is not "_"])
+            json.dump(s, f)
 
         selected = 0

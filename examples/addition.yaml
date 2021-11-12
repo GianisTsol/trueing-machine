@@ -56,8 +56,6 @@ addition:
 addition-finish:
   #do stuff with result
   move: -1
-  write: 9
-
 
 main:
   goto: addition
